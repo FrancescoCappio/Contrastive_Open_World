@@ -1,5 +1,7 @@
 # Contrastive Learning for Cross-Domain Open World Recognition
 
+![](media/cow.png)
+
 ## 1. Requirements
 
 ### Packages
