@@ -7,7 +7,7 @@ def parse_args(default=False):
     parser = ArgumentParser(description='Pytorch implementation of CSI')
 
     parser.add_argument('--dataset', help='Dataset', default='OWR',
-                        choices=['OWR', 'COSDA-HR'], type=str)
+                        choices=['OWR', 'COSDA-HR', 'CORe50'], type=str)
     parser.add_argument('--source', help="source dataset ROD/synROD", type=str, default="ROD")
     parser.add_argument('--target', help="target dataset ROD/synROD/arid", type=str, default="arid") # used only in eval
     parser.add_argument('--eval_episode', help="Episode to eval in incremental learning", type=int, default=0)

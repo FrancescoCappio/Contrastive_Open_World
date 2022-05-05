@@ -239,24 +239,6 @@ while True:
         P.real_to_prog = real_to_prog
         P.prog_to_real = prog_to_real
 
-        # if necessary we recreate the optimizer and scheduler: 
-        if P.current_episode == 1 and P.freeze_centers_bp:
-            # wrap SGD in LARS for multi-gpu optimization
-            training_params = []
-
-            for name, p in model.named_parameters():
-                if "prototypes" in name:
-                    print(f"Removing {name} from trained parameters")
-                else:
-                    training_params.append(p)
-
-            base_optimizer = optim.SGD(training_params, lr=P.lr_init*10.0, momentum=0.9, weight_decay=P.weight_decay)
-            optimizer = LARS(base_optimizer, eps=1e-8, trust_coef=0.001)
-            lr_decay_gamma = 0.1
-
-            # our scheduler is warmup + constant (obtained via step lr without steps)
-            scheduler_warmup = ConstantScheduler(optimizer)
-
     ### Count all and current episode iters ###
     its += 1
     current_ep_its += 1 

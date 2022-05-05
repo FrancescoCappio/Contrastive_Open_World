@@ -35,6 +35,10 @@ if P.dataset == "COSDA-HR":
 elif P.dataset == "OWR":
     P.total_episodes = 4
     P.batch_K = 11
+elif P.dataset == "CORe50":
+    P.source = "source"
+    P.total_episodes = 4
+    P.batch_K = 3
 
 # an estimate of total number of iterations which however could be much more
 P.iterations = P.ep_0_min_its + (P.total_episodes - 1) * P.eps_min_its

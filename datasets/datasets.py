@@ -224,7 +224,7 @@ def get_test_datasets(P, episode=0):
         selected_known_classes = selected_order[:tot_known_classes]
 
         tot_unknown_classes = 25
-        selected_unknown_classes = selected_order[-(tot_unknown_classes+1):]
+        selected_unknown_classes = selected_order[-(tot_unknown_classes):]
 
         known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
         unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
@@ -240,11 +240,29 @@ def get_test_datasets(P, episode=0):
         selected_known_classes = selected_order[:tot_known_classes]
 
         tot_unknown_classes = 1
-        selected_unknown_classes = selected_order[-(tot_unknown_classes+1):]
+        selected_unknown_classes = selected_order[-(tot_unknown_classes):]
+        import ipdb; ipdb.set_trace() 
 
         known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
         unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
 
+    elif P.dataset == "CORe50":
+        classes_order_file = 'data/data_txt/CORe50/fixed_order.npy'
+        orders = np.load(classes_order_file)
+        selected_order = orders[P.dataorder]
+
+        target_file = f'data/data_txt/COSDA-HR/target.txt'
+        tot_known_classes = [3,5,7,9][episode]
+        selected_known_classes = selected_order[:tot_known_classes]
+
+        tot_unknown_classes = 10 - tot_known_classes
+        selected_unknown_classes = selected_order[-(tot_unknown_classes):]
+
+        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+
+        print(f"Known classes: {selected_known_classes}")
+        print(f"Unknown classes: {selected_unknown_classes}")
 
     elif P.dataset == "OWR_val":
         classes_order_file = 'data/data_txt/OWR/fixed_order.npy'
@@ -332,6 +350,28 @@ def get_dataset_2(P, episode=0, train=True, target_known_mask=None, target_known
 
         P.classes_current_episode = selected_classes
         P.all_learned_classes = selected_order[:classes_till_now]
+
+    elif benchmark == "CORe50":
+        source = P.source
+        sources = [source]
+
+        classes_order_file = 'data/data_txt/CORe50/fixed_order.npy'
+        orders = np.load(classes_order_file)
+        selected_order = orders[P.dataorder]
+        
+        tot_n_classes = [3,5,7,9]
+        classes_prec_episode = 0
+        classes_till_now = tot_n_classes[episode]
+
+        if episode > 0:
+            classes_prec_episode = tot_n_classes[episode-1]
+        n_classes_this_episode = classes_till_now - classes_prec_episode
+
+        selected_classes = selected_order[classes_prec_episode:classes_till_now]
+
+        P.classes_current_episode = selected_classes
+        P.all_learned_classes = selected_order[:classes_till_now]
+
 
     elif benchmark == "OWR_val": # for validation protocol
         source = P.source
@@ -442,6 +482,18 @@ def get_replay_datasets(P, episode, selected_ids_dict):
         n_old_classes = tot_n_classes[episode-1]
         old_classes = selected_order[:n_old_classes]
 
+    elif benchmark == "CORe50":
+        source = P.source
+        sources = [source]
+
+        classes_order_file = 'data/data_txt/CORe50/fixed_order.npy'
+        orders = np.load(classes_order_file)
+        selected_order = orders[P.dataorder]
+        
+        tot_n_classes = [3,5,7,9]
+
+        n_old_classes = tot_n_classes[episode-1]
+        old_classes = selected_order[:n_old_classes]
 
     elif benchmark == "OWR_val_inc":
         source = P.source
