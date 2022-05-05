@@ -60,7 +60,7 @@ checkpoint = model_state_dict
 missing, unexpected = model.load_state_dict(checkpoint, strict=not P.no_strict) 
 print(f"Missing keys: {missing}\nUnexpected keys: {unexpected}")
 
-assert P.eval_episode == 0 or P.use_paco_stats or P.replay_buffer_size > 0, "Cannot perform eval in this condition!"
+assert P.eval_episode == 0 or P.replay_buffer_size > 0, "Cannot perform eval in this condition!"
 
 if P.multi_gpu:
     model = apex.parallel.convert_syncbn_model(model)
