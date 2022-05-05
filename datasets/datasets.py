@@ -241,7 +241,6 @@ def get_test_datasets(P, episode=0):
 
         tot_unknown_classes = 1
         selected_unknown_classes = selected_order[-(tot_unknown_classes):]
-        import ipdb; ipdb.set_trace() 
 
         known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
         unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
