@@ -26,7 +26,7 @@ def parse_args(default=False):
     parser.add_argument('--optimizer', help='Optimizer', choices=['sgd', 'adam', 'lars'], default='lars', type=str)
     parser.add_argument('--lr_scheduler', help='Learning rate scheduler', choices=['step_decay', 'cosine'], default='step_decay', type=str)
     parser.add_argument('--warmup', help='Warm-up iterations', default=2500, type=int)
-    parser.add_argument('--lr_init', help='Initial learning rate', default=0.005, type=float)
+    parser.add_argument('--lr_init', help='Initial learning rate', default=0.05, type=float)
     parser.add_argument('--weight_decay', help='Weight decay', default=1e-6, type=float)
     parser.add_argument('--num_workers', type=int, default=4, help="Num of workers for data loaders")
 

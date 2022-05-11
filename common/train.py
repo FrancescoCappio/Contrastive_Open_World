@@ -94,7 +94,7 @@ model.normalize.std=std
 criterion = nn.CrossEntropyLoss().to(device)
 
 # wrap SGD in LARS for multi-gpu optimization
-base_optimizer = optim.SGD(model.parameters(), lr=P.lr_init*10.0, momentum=0.9, weight_decay=P.weight_decay)
+base_optimizer = optim.SGD(model.parameters(), lr=P.lr_init, momentum=0.9, weight_decay=P.weight_decay)
 optimizer = LARS(base_optimizer, eps=1e-8, trust_coef=0.001)
 lr_decay_gamma = 0.1
 
