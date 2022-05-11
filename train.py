@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 
 from common.train import *
 import torch
+import wandb 
 
 from training.sup import setup
 
@@ -52,11 +53,18 @@ def log_iter(meters, current_lr, its):
     eta_sec = eta_sec % 60
 
     log_string = '[Iteration %3d] [Avg time %.2fs] [ETA %02dh%02dm%02ds] [LR %.6f]' % (its, meters["time"].average, hour, eta_min, eta_sec, current_lr)
+    log_data = {
+        "iter_time": meters["time"].average,
+        "lr": current_lr,
+        }
     for k in meters.keys():
         if not k == "time":
             log_string += ' [{} {:6.4f}]'.format(k, meters[k].average)
+            log_data[k] = meters[k].average
             meters[k] = AverageMeter()
     logger.log(log_string)
+
+    wandb.log(log_data,step=its)
 
 def periodic_source_eval(its):
     # we perform periodic *evals* episodes in which we simply compute source statistics and print them 
@@ -83,6 +91,8 @@ def periodic_source_eval(its):
         P.stats_condition_matched = True
     logger.log(f"Alpha ratio: {alpha_ratio}. Termination condition matched: {P.stats_condition_matched}")
 
+    wandb.log({"alpha_ratio": alpha_ratio},step=its)
+
     return idx_ordered_nearest_prototypes_by_class
 
 import atexit
@@ -96,6 +106,8 @@ train, fname = setup(P, model, source_test_loader)
 logger = Logger(fname, local_rank=P.local_rank)
 logger.log(P)
 logger.log(model)
+
+wandb.init(project="COW", name=fname, config=P)
 
 P.prog_to_real = {}
 P.real_to_prog = {}
