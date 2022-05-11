@@ -217,7 +217,7 @@ while True:
             single_GPU_batch_size = int(P.batch_p*single_GPU_batch_K)
 
             if P.adapt_lr:
-                base_lr = P.lr_init*10.0 # this is used for batch_K equal to P.batch_K 
+                base_lr = P.lr_init # this is used for batch_K equal to P.batch_K 
                 adapted_lr = (batch_K/P.batch_K) * base_lr
                 base_optimizer = optim.SGD(model.parameters(), lr=adapted_lr, momentum=0.9, weight_decay=P.weight_decay)
                 optimizer = LARS(base_optimizer, eps=1e-8, trust_coef=0.001)
