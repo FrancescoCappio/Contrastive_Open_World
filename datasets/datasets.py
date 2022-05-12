@@ -250,7 +250,7 @@ def get_test_datasets(P, episode=0):
         orders = np.load(classes_order_file)
         selected_order = orders[P.dataorder]
 
-        target_file = f'data/data_txt/COSDA-HR/target.txt'
+        target_file = f'data/data_txt/CORe50/target.txt'
         tot_known_classes = [3,5,7,9][episode]
         selected_known_classes = selected_order[:tot_known_classes]
 
