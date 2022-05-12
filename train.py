@@ -91,7 +91,7 @@ def periodic_source_eval(its):
         P.stats_condition_matched = True
     logger.log(f"Alpha ratio: {alpha_ratio}. Termination condition matched: {P.stats_condition_matched}")
 
-    wandb.log({"alpha_ratio": alpha_ratio},step=its)
+    wandb.log({"alpha_ratio": alpha_ratio, "compactness": compactness, "separation": separation},step=its)
 
     return idx_ordered_nearest_prototypes_by_class
 
