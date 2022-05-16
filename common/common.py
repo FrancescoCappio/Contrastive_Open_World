@@ -39,7 +39,7 @@ def parse_args(default=False):
     parser.add_argument('--hyp_dims', type=int, help="Number of hypersphere dimensions", default=128, dest="simclr_dim")
 
     ##### Incremental learning options #####
-    parser.add_argument('--compactness_margin', type = float, help="Margin for compactness/separation learning constraint", default=0.1) # epsilon in paper
+    parser.add_argument('--compactness_margin', type = float, help="Margin for compactness/separation learning constraint", default=0.25) # epsilon in paper
     parser.add_argument('--ep_0_min_its', type=int, default=15000, help="Minimum number of iterations for first episode")
     parser.add_argument('--eps_min_its', type=int, default=15000, help="Minimum number of iterations for subsequent episodes")
 

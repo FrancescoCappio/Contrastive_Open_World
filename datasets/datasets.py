@@ -251,10 +251,10 @@ def get_test_datasets(P, episode=0):
         selected_order = orders[P.dataorder]
 
         target_file = f'data/data_txt/CORe50/target.txt'
-        tot_known_classes = [3,5,7,9][episode]
+        tot_known_classes = [10,15,20,25][episode]
         selected_known_classes = selected_order[:tot_known_classes]
 
-        tot_unknown_classes = 10 - tot_known_classes
+        tot_unknown_classes = 25
         selected_unknown_classes = selected_order[-(tot_unknown_classes):]
 
         known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
@@ -358,7 +358,7 @@ def get_dataset_2(P, episode=0, train=True, target_known_mask=None, target_known
         orders = np.load(classes_order_file)
         selected_order = orders[P.dataorder]
         
-        tot_n_classes = [3,5,7,9]
+        tot_n_classes = [10,15,20,25]
         classes_prec_episode = 0
         classes_till_now = tot_n_classes[episode]
 
@@ -489,7 +489,7 @@ def get_replay_datasets(P, episode, selected_ids_dict):
         orders = np.load(classes_order_file)
         selected_order = orders[P.dataorder]
         
-        tot_n_classes = [3,5,7,9]
+        tot_n_classes = [10,15,20,25]
 
         n_old_classes = tot_n_classes[episode-1]
         old_classes = selected_order[:n_old_classes]

@@ -42,7 +42,7 @@ elif P.dataset == "CORe50":
     P.source = "source"
     P.target = "target"
     P.total_episodes = 4
-    P.batch_K = 3
+    P.batch_K = 10
 
 
 ### Initialize model ###
