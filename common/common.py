@@ -1,7 +1,8 @@
 from argparse import ArgumentParser
+import os
 
 
-def parse_args(default=False):
+def parse_args():
     """Command-line argument parser for training."""
 
     parser = ArgumentParser(description='Pytorch implementation of CSI')
@@ -44,11 +45,13 @@ def parse_args(default=False):
     parser.add_argument('--eps_min_its', type=int, default=15000, help="Minimum number of iterations for subsequent episodes")
 
 
+    parser.add_argument("--data_path", default="~/data/", help="Path of training data")
     parser.add_argument("--suffix", default="", type=str, help="suffix for log dir")
     parser.add_argument("--save_dir", default="eval_output", type=str, help="Directory for eval outputs (features, prototypes)")
 
+    args = parser.parse_args()
+    args.data_path = os.path.expanduser(args.data_path)
 
-    if default:
-        return parser.parse_args('')  # empty string
-    else:
-        return parser.parse_args()
+    return args
+
+

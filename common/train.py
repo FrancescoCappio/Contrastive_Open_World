@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 
 from common.common import parse_args
 import models.classifier as C
-from datasets.datasets import get_dataset_2, get_style_dataset, BalancedMultiSourceRandomSampler
+from datasets.datasets import get_dataset_2, BalancedMultiSourceRandomSampler
 from utils.utils import load_ckpt
 import sys
 import os

@@ -12,7 +12,6 @@ import random
 
 from utils.utils import set_random_seed
 
-DATA_PATH = '~/data/'
 
 class MultiDataTransform(object):
     def __init__(self, transform):
@@ -74,10 +73,10 @@ def _dataset_info(txt_labels):
     return file_names, labels
 
 class FileDataset(data.Dataset):
-    def __init__(self, benchmark, data_file, transform=None,add_idx=False):
+    def __init__(self, data_path, benchmark, data_file, transform=None,add_idx=False):
         super().__init__()
 
-        self.root_dir = DATA_PATH
+        self.root_dir = data_path
         self.benchmark = benchmark
         self.data_file = data_file
         self.transform = transform
@@ -142,10 +141,10 @@ def get_pseudo_targets(P, known_mask, known_pseudo_labels, transform, n_classes)
     selected_names = np_names[known_mask]
     selected_labels = known_pseudo_labels[known_mask]
 
-    return get_class_datasets(P.dataset, data_file=None, transform=transform, names=selected_names.tolist(), labels = selected_labels.tolist(), n_classes=n_classes)
+    return get_class_datasets(P.data_path, P.dataset, data_file=None, transform=transform, names=selected_names.tolist(), labels = selected_labels.tolist(), n_classes=n_classes)
 
 
-def get_class_datasets(benchmark, data_file, classes, transform=None, names=None, labels=None, train=False):
+def get_class_datasets(data_path, benchmark, data_file, classes, transform=None, names=None, labels=None, train=False):
     # from a dataset file it builds a set of datasets, one for each class, keep only specificed classes 
     if names is None:
         names, labels = _dataset_info(data_file)
@@ -159,7 +158,7 @@ def get_class_datasets(benchmark, data_file, classes, transform=None, names=None
         selected_names.extend(np_names[mask].tolist())
         selected_labels.extend(np_labels[mask].tolist())
 
-    root_dir = DATA_PATH
+    root_dir = data_path
 
     names = np.array(selected_names)
     labels_set = set(selected_labels)
@@ -186,7 +185,7 @@ def get_datasets_for_test(P):
     # target
     benchmark = P.dataset
     file_path = f'data/data_txt/{benchmark}/{P.test_domain}.txt'
-    target_ds = FileDataset(benchmark, file_path, test_transform, add_idx=True)
+    target_ds = FileDataset(P.data_path, benchmark, file_path, test_transform, add_idx=True)
     
     # source
     if benchmark == "OfficeHome":
@@ -206,7 +205,7 @@ def get_datasets_for_test(P):
 
     source_file_path = f'data/data_txt/{benchmark}/{source_name}.txt'
 
-    source_ds = FileDataset(benchmark, source_file_path, test_transform, add_idx=True)
+    source_ds = FileDataset(P.data_path, benchmark, source_file_path, test_transform, add_idx=True)
 
     return source_ds, target_ds, n_classes
 
@@ -226,8 +225,8 @@ def get_test_datasets(P, episode=0):
         tot_unknown_classes = 25
         selected_unknown_classes = selected_order[-(tot_unknown_classes):]
 
-        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
-        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+        known_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
         # we should load the target dataset filtering only known + unknown classes
 
     elif P.dataset == "COSDA-HR":
@@ -242,8 +241,8 @@ def get_test_datasets(P, episode=0):
         tot_unknown_classes = 1
         selected_unknown_classes = selected_order[-(tot_unknown_classes):]
 
-        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
-        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+        known_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
 
     elif P.dataset == "CORe50":
         classes_order_file = 'data/data_txt/CORe50/fixed_order.npy'
@@ -257,8 +256,8 @@ def get_test_datasets(P, episode=0):
         tot_unknown_classes = 25
         selected_unknown_classes = selected_order[-(tot_unknown_classes):]
 
-        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
-        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+        known_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
 
         print(f"Known classes: {selected_known_classes}")
         print(f"Unknown classes: {selected_unknown_classes}")
@@ -275,8 +274,8 @@ def get_test_datasets(P, episode=0):
         tot_unknown_classes = 2
         selected_unknown_classes = selected_order[-(tot_unknown_classes+1):]
 
-        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
-        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+        known_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
 
     elif P.dataset == "OWR_val_inc":
         classes_order_file = 'data/data_txt/OWR/fixed_order.npy'
@@ -290,8 +289,8 @@ def get_test_datasets(P, episode=0):
         tot_unknown_classes = 2
         selected_unknown_classes = selected_order[-(tot_unknown_classes+1):]
 
-        known_classes_datasets = get_class_datasets(P.dataset, target_file, selected_known_classes, test_transform, train=False)
-        unknown_classes_datasets = get_class_datasets(P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
+        known_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_known_classes, test_transform, train=False)
+        unknown_classes_datasets = get_class_datasets(P.data_path, P.dataset, target_file, selected_unknown_classes, test_transform, train=False)
 
     else:
         raise NotImplementedError(f"Dataset {P.dataset} is not known")
@@ -421,7 +420,7 @@ def get_dataset_2(P, episode=0, train=True, target_known_mask=None, target_known
 
     # we should load only the classes from current order and episode
 
-    datasets = get_class_datasets(benchmark, source_file, selected_classes, transform, train=train)
+    datasets = get_class_datasets(P.data_path, benchmark, source_file, selected_classes, transform, train=train)
 
     # single source only for now
     domain_datasets[source] = datasets
@@ -512,7 +511,7 @@ def get_replay_datasets(P, episode, selected_ids_dict):
 
     source_file = f'data/data_txt/{benchmark}/{source}_train.txt'
     # we should load only the classes from current order and episode
-    datasets = get_class_datasets(benchmark, source_file, old_classes, transform, train=False)
+    datasets = get_class_datasets(P.data_path, benchmark, source_file, old_classes, transform, train=False)
 
     # single source only for now
     domain_datasets[source] = datasets
@@ -531,14 +530,6 @@ def get_replay_datasets(P, episode, selected_ids_dict):
     # subsample classes
     return class_datasets
 
-
-def get_style_dataset(P):
-    transform = get_test_transform_crop()
-    benchmark = P.dataset
-
-    file_path = f'data/data_txt/{benchmark}/{P.test_domain}.txt'
-    ds = FileDataset(benchmark, file_path,transform)
-    return ds
 
 class DistributedMultiSourceRandomSampler(Sampler):
     r"""Samples elements randomly from a ConcatDataset, cycling between sources.
