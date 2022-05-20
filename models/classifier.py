@@ -7,7 +7,7 @@ import models.transform_layers as TL
 def get_simclr_augmentation(P, image_size):
 
     # Align augmentation
-    color_jitter = TL.ColorJitterLayer(brightness=0.9, contrast=0.9, saturation=0.9, hue=0.5, p=0.8)
+    color_jitter = TL.ColorJitterLayer(brightness=(0.5,2), contrast=(0.5,2), saturation=(0.5,2), hue=0.5, p=0.8)
     color_gray = TL.RandomColorGrayLayer(p=0.2)
 
     transform = nn.Sequential(
