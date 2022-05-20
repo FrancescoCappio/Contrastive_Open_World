@@ -38,6 +38,11 @@ if P.dataset == "COSDA-HR":
     P.target = "target"
     P.total_episodes = 16
     P.batch_K = 10
+elif P.dataset == "CORe50":
+    P.source = "source"
+    P.target = "target"
+    P.total_episodes = 4
+    P.batch_K = 10
 
 
 ### Initialize model ###

@@ -31,6 +31,10 @@ instructions for datasets preparation.
 
 Download data from the [official site](https://nlab-mpg.github.io/COSDA-HR/) and untar it. 
 
+#### CORe50 
+
+Download data from the [official site](https://vlomonaco.github.io/core50/). You will need the 'cropped_128x128_images.zip' file. 
+
 ## 2. Training
 
 We perform training on a single GPU. 
@@ -56,6 +60,13 @@ To train on COSDA-HR:
 python train.py --dataset COSDA-HR --dataorder 0
 ```
 
+To train on CORe50: 
+
+```bash 
+python train.py --dataset CORe50 --dataorder 0
+```
+
+
 ## 3. Evaluation
 
 To perform an eval on a single experiment and episode one can use the `eval.py` script:
@@ -80,4 +91,9 @@ Similarly to test a complete COSDA-HR experiment:
 
 ```bash 
 python eval_COSDA.py logs/COSDA_source
+```
+
+And for CORe50:
+```bash 
+python eval_CORe50.py logs/CORe50_source
 ```

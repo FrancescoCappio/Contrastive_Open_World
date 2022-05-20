@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 
 from common.common import parse_args
 import models.classifier as C
-from datasets.datasets import get_dataset_2, get_style_dataset, BalancedMultiSourceRandomSampler
+from datasets.datasets import get_dataset_2, BalancedMultiSourceRandomSampler
 from utils.utils import load_ckpt
 import sys
 import os
@@ -35,6 +35,10 @@ if P.dataset == "COSDA-HR":
 elif P.dataset == "OWR":
     P.total_episodes = 4
     P.batch_K = 11
+elif P.dataset == "CORe50":
+    P.source = "source"
+    P.total_episodes = 4
+    P.batch_K = 10
 
 # an estimate of total number of iterations which however could be much more
 P.iterations = P.ep_0_min_its + (P.total_episodes - 1) * P.eps_min_its
@@ -90,7 +94,7 @@ model.normalize.std=std
 criterion = nn.CrossEntropyLoss().to(device)
 
 # wrap SGD in LARS for multi-gpu optimization
-base_optimizer = optim.SGD(model.parameters(), lr=P.lr_init*10.0, momentum=0.9, weight_decay=P.weight_decay)
+base_optimizer = optim.SGD(model.parameters(), lr=P.lr_init, momentum=0.9, weight_decay=P.weight_decay)
 optimizer = LARS(base_optimizer, eps=1e-8, trust_coef=0.001)
 lr_decay_gamma = 0.1
 
